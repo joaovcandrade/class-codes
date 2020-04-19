@@ -33,17 +33,31 @@ elif num_color == 4:
     img_gray[img_gray < 64]  = 0
     img_gray[(64 < img_gray) & (img_gray < 128)]  = 64
     img_gray[(128 < img_gray) & (img_gray < 192)]  = 128
-    img_gray[img_gray > 192]  = 192
-else:
+    img_gray[img_gray > 192]  = 255
+elif num_color == 8:
     img_gray[img_gray < 32]  = 0
     img_gray[(32 < img_gray) & (img_gray < 64)]  = 32
     img_gray[(64 < img_gray) & (img_gray < 96)]  = 64
-    img_gray[(96 < img_gray) & (img_gray < 128)]  = 128
-    img_gray[(128 < img_gray) & (img_gray < 160)]  = 160
-    img_gray[(160 < img_gray) & (img_gray < 192)]  = 192
-    img_gray[(192 < img_gray) & (img_gray < 224)]  = 224
+    img_gray[(96 < img_gray) & (img_gray < 128)]  = 96
+    img_gray[(128 < img_gray) & (img_gray < 160)]  = 128
+    img_gray[(160 < img_gray) & (img_gray < 192)]  = 160
+    img_gray[(192 < img_gray) & (img_gray < 224)]  = 192
     img_gray[img_gray > 224]  = 255
+else:
 
+    rng = round(255/num_color)
+    rng_sum = rng
+
+    for n in range(num_color):
+        lst_vl = rng_sum-rng
+        if(n == 0):
+            img_gray[img_gray < rng_sum ]  = lst_vl
+        elif(n==num_color-1):
+            img_gray[ img_gray > lst_vl ]  = rng_sum
+        else:
+            img_gray[ ((lst_vl < img_gray)) & ((img_gray < rng_sum))]  = lst_vl        
+
+        rng_sum = 255 if(rng_sum+rng >= 255) else rng_sum+rng
 
 new_image = Image.fromarray(img_gray)
 
